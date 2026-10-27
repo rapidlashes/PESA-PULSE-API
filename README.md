@@ -58,7 +58,7 @@ email_domain is derived with `email.split("@")[-1].lower()`. the `[-1]` tells py
 `latitude` and `longitude` are wrapped in float(), as the brief requires.
 Flat dictionaries were the goal because they map directly to table rows, which makes the pandas step trivial.
 
-#### Step 4:
+#### Step 4: Finding unique cities
 `unique_cities(customers)` is a set comprehension: `{c["address"]["city"] for c in customers}`. A set stores each value only once, so its length is the number of distinct cities.
 
 I then compare that number with the number of customers which is equal

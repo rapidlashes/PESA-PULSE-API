@@ -60,8 +60,7 @@ Flat dictionaries were the goal because they map directly to table rows, which m
 
 #### Step 4: Finding unique cities
 `unique_cities(customers)` is a set comprehension: `{c["address"]["city"] for c in customers}`. A set stores each value only once, so its length is the number of distinct cities.
-
-I then compare that number with the number of customers which is equal
+I then compare that number with the number of customers which is equal.
 
 **MEANING :** every customer is in a different city, so there are no city-level clusters and marketing cannot target campaigns by city.
 

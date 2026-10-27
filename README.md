@@ -70,7 +70,6 @@ I then compare that number with the number of customers which is equal
 #### Step 5: Counting customers with dictinary comprehension
 This step counts th number of customers in each city, and bearing each domain name giving back the result inform of a dictionary with this format `{<str> : <int>}`
 The brief bans **collections.Counter** and **pandas** here, so the counting is explicitly done by for loops and adding a count whenever the function loops in individual customers:
-
 syntax:
 ```python
 def city_counts(customers):
@@ -87,7 +86,6 @@ def city_counts(customers):
 ```
 
 Now lets return a dictionary of domain names and count of customers:
-
 syntax:
 ```python
 def email_domain_counts(customers: list[dict]) -> dict[str, int]:
@@ -109,7 +107,6 @@ Having converted the dictionaries into dataframes we then save them as csv files
 
 #### Step 7: Plotting
 This is the final step where we are plotting the distribution of our customers in individual cities and domain names. 
-
 syntax:
 ```python
 def plot_distribution(city_counts: dict[str, int], path: Path) -> None:

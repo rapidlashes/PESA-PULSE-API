@@ -5,12 +5,14 @@ Pesa Pulse has signed a partner who shares its customer directory through an API
 "https://jsonplaceholder.typicode.com/users"
 
 ### Project Layout
-```Analysis.py 
+```
+Analysis.py 
 Outputs/:
         customers.csv              #a flat dictionary with individual attributes eg 'id','name', 'email' etc 
         cities.csv                 # a dictinary; city name as key, customers as value {<str>:<int>}
         domains.csv                #a dictionary with email domain as key and customers as value{<str>:<int>}
         customer_distribution.png  #no. of customers per city 
         domain_distribution.png    #no. of customers per email domain
-README.md```    
+README.md
+```    
 

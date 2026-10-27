@@ -115,10 +115,9 @@ syntax:
 def plot_distribution(city_counts: dict[str, int], path: Path) -> None:
     labels, values = list(city_counts.keys()), list(city_counts.values())
 ```
-When calling out this function we will pass `counts` as the first parameter and the path of our to be .png file.
+When calling out this function we will pass `counts` as the first parameter and the path of our to be .png file. The `.keys()` is a function that is used to to extract keys from a dictinary, `list(city_counts.keys())` is basically telling us to store those keys extracted in a list. Same applies to the values. 
 
 Suppose we want to plot the distribution of the domain_names:
-
 syntax:
 ```python
 def plot_distribution(domain_counts: dict[str, int], path):

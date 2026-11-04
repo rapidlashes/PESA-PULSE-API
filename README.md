@@ -13,24 +13,43 @@ uv add pandas matplotlib requests
 
 ### Project Layout
 ```
-Analysis.py 
-Outputs/:
-        customers.csv              #a flat dictionary with individual attributes eg 'id','name', 'email' etc 
-        cities.csv                 # a dictinary; city name as key, customers as value {<str>:<int>}
-        domains.csv                #a dictionary with email domain as key and customers as value{<str>:<int>}
-        customer_distribution.png  #no. of customers per city 
-        domain_distribution.png    #no. of customers per email domain
-README.md
-```    
+ASSIGNMENT_1/
+│
+├── Analysis.py
+├── Data/
+│   └── Processed/
+│       ├── customers.csv   
+│       ├── cities.csv       
+│       └── domains.csv
+│
+├── Plots/
+│   ├── customer_distribution.png
+│   └── domain_distribution.png
+│
+└── README.md
+
+```
+`customers.csv`: A flat table containing individual customer attributes, e.g. id, name, email, etc.
+
+`cities.csv`: A table containing city names and customer counts.
+
+`domains.csv1`: A table containing email domains and customer counts.
+
+`customer_distribution.png`: Number of customers per city. 
+
+`domain_distribution.png`: Number of customers per email domain.  
+
 ### My Approach 
-I approached the project in 8 steps each step in its own function , from retrieving data to visualising and generating distribution plots.
+I approached the project in 7 steps each step in its own function , from retrieving data to visualising and generating distribution plots.
 
 #### Step 1:Retrieving data with requests
 `get_customers(url)` calls `requests.get(url, timeout=10)`, then `raise_for_status()`, then returns `response.json()`.
 
-**Timeout:** without one, a stalled server would hang the script forever. Ten seconds is generous for a small payload.
-**Status check:** `raise_for_status()` turns a 404 or 500 into an exception instead of letting an error page be parsed as data.
-**Errors:** I catch `Timeout`(if the API takes too long to respond), `ConnectionError`(if a conection cant be established for example due to network problems), `HTTPError`(The setrver returns an unsuccessfull HTTPS status).
+`Timeout:` Without one, a stalled server could leave the script waiting indefinitely. Ten seconds is generous for a small payload.
+
+`Status check:` raise_for_status() turns a 404 or 500 into an exception instead of letting an error page be parsed as data.
+
+`Errors:` I catch `RequestException`, which is the base exception for common Requests errors, including `Timeout`, `ConnectionError` and `HTTPError`.
 
 #### Step 2: Explore the nested dictionaries
 Our Jason file comprises of a nested dictionary, meaning it has dictionaries inside the main dictinary, and this arreangement has levels to it.
@@ -39,7 +58,7 @@ So in our JSON file we have these 3 keys whose values are dictinaries by themsel
 |Key               |Type        |Value                                  | 
 |------------------|------------|---------------------------------------|
 |`address`         |dict        |street, suite, city, zipcode, geo      |
-|`address.geo`     |nested dict |lat, long                              |
+|`address.geo`     |nested dict |lat, lng                               |
 |`company`         |dict        |name, CatchPhrase, bs                  |
 
 All other fields `(id, name, username, email, phone, website)` are flat.
@@ -47,7 +66,7 @@ The deepest attribute is three levels down (record → address → geo → lat/l
 
 ```python
 'latitude' = c['address']['geo']['lat']
-'longitude = c['address']['geo']['long']
+'longitude = c['address']['geo']['lng']
 ```
 
 #### Step 3: Extract customer attributes
@@ -99,16 +118,23 @@ def email_domain_counts(customers: list[dict]) -> dict[str, int]:
 ```
 
 #### Step 6: Converting to DataFrames and saving as CSV file
-` def to_dataframe(rows)` is a function that converts these dictinaries we have been returning into csv files.
-We will pass `result_x`, `dict` , `counts` when calling out this function. `result_x` is the flat dictinary we returned from  the `extract_attribute()` function , `dict` is the dictinary we returned from the `email_domain_counts()` function while `counts` is what we returned from the `city_counts()` function.
+I use three separate functions to convert the different data structures into DataFrames:
 
-Having converted the dictionaries into dataframes we then save them as csv files in our project folder using `filename.to_csv(path)`.
+`customers_to_dataframe(rows)` converts the list of flat customer dictionaries into a DataFrame.
+
+`domains_to_dataframe(rows)` converts the email domain dictionary into a DataFrame with columns domain and domain_count.
+
+`cities_to_dataframe(rows)` converts the city dictionary into a DataFrame with columns City and count.
+
+We pass **result_x**, **dic** and **counts** when calling these functions. result_x is the list of flat dictionaries returned from the `extract_attributes()` function, dic is the dictionary returned from the `email_domain_counts()` function, while counts is what we returned from the `city_counts()` function.
+
+Having converted the data into DataFrames, we then save them as CSV files in our project folder using DataFrame.to_csv(path, index=False).
 
 #### Step 7: Plotting
 This is the final step where we are plotting the distribution of our customers in individual cities and domain names. 
 syntax:
 ```python
-def plot_distribution(city_counts: dict[str, int], path: Path) -> None:
+def plot_city_distribution(city_counts: dict[str, int], path: Path) -> None:
     labels, values = list(city_counts.keys()), list(city_counts.values())
 ```
 When calling out this function we will pass `counts` as the first parameter and the path of our to be .png file. The `.keys()` is a function that is used to to extract keys from a dictinary, `list(city_counts.keys())` is basically telling us to store those keys extracted in a list. Same applies to the values. 
@@ -116,7 +142,7 @@ When calling out this function we will pass `counts` as the first parameter and 
 Suppose we want to plot the distribution of the domain_names:
 syntax:
 ```python
-def plot_distribution(domain_counts: dict[str, int], path):
+def plot_domain_distribution(domain_counts: dict[str, int], path):
     labels, values = list(domain_counts.keys()), list(domain_counts.values())
 ```
 Likewise when calling out this function , we will pass `dic` as the first parameter followed by our desired path.

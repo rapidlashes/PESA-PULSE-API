@@ -125,5 +125,8 @@ Likewise when calling out this function , we will pass `dic` as the first parame
 1. The directory is small (about 10 records), so the script loads everything in one request. A larger API would need pagination.
 2. Cities are matched as exact strings. Real-world data would need cleaning for spelling and case variants before counting.
 
+### Add ons
+Putting all our executable code in a `if __name__ == __main__:` for the purpose of code security, and allowing one to reuse imported classes and functions without printing everything from the parent code.
+
 
 
